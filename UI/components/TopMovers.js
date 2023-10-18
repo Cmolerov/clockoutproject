@@ -8,95 +8,42 @@ import {
 } from "react-native";
 import axios from "axios";
 import StockList from "./StockList";
+import styled from "styled-components/native";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 
-// const stockData = [
-//     {
-//         request_id: "31d59dda-80e5-4721-8496-d0d32a654afe",
-//         results: {
-//             active: true,
-//             address: {
-//                 address1: "One Apple Park Way",
-//                 city: "Cupertino",
-//                 postal_code: "95014",
-//                 state: "CA",
-//             },
-//             branding: {
-//                 icon_url:
-//                     "https://api.polygon.io/v1/reference/company-branding/d3d3LmFwcGxlLmNvbQ/images/2022-01-10_icon.png",
-//                 logo_url:
-//                     "https://api.polygon.io/v1/reference/company-branding/d3d3LmFwcGxlLmNvbQ/images/2022-01-10_logo.svg",
-//             },
-//             cik: "0000320193",
-//             composite_figi: "BBG000B9XRY4",
-//             currency_name: "usd",
-//             description:
-//                 "Apple designs a wide variety of consumer electronic devices, including smartphones (iPhone), tablets (iPad), PCs (Mac), smartwatches (Apple Watch), AirPods, and TV boxes (Apple TV), among others. The iPhone makes up the majority of Apple's total revenue. In addition, Apple offers its customers a variety of services such as Apple Music, iCloud, Apple Care, Apple TV+, Apple Arcade, Apple Card, and Apple Pay, among others. Apple's products run internally developed software and semiconductors, and the firm is well known for its integration of hardware, software and services. Apple's products are distributed online as well as through company-owned stores and third-party retailers. The company generates roughly 40% of its revenue from the Americas, with the remainder earned internationally.",
-//             homepage_url: "https://www.apple.com",
-//             list_date: "1980-12-12",
-//             locale: "us",
-//             market: "stocks",
-//             market_cap: 2771126040150,
-//             name: "Apple Inc.",
-//             phone_number: "(408) 996-1010",
-//             primary_exchange: "XNAS",
-//             round_lot: 100,
-//             share_class_figi: "BBG001S5N8V8",
-//             share_class_shares_outstanding: 16406400000,
-//             sic_code: "3571",
-//             sic_description: "ELECTRONIC COMPUTERS",
-//             ticker: "AAPL",
-//             ticker_root: "AAPL",
-//             total_employees: 154000,
-//             type: "CS",
-//             weighted_shares_outstanding: 16334371000,
-//         },
-//         status: "OK",
-//     },
-//     {
-//         request_id: "31d59dda-80e5-4721-8496-d0d32a654afe",
-//         results: {
-//             active: true,
-//             address: {
-//                 address1: "One Apple Park Way",
-//                 city: "Cupertino",
-//                 postal_code: "95014",
-//                 state: "CA",
-//             },
-//             branding: {
-//                 icon_url:
-//                     "https://api.polygon.io/v1/reference/company-branding/d3d3LmFwcGxlLmNvbQ/images/2022-01-10_icon.png",
-//                 logo_url:
-//                     "https://api.polygon.io/v1/reference/company-branding/d3d3LmFwcGxlLmNvbQ/images/2022-01-10_logo.svg",
-//             },
-//             cik: "0000320193",
-//             composite_figi: "BBG000B9XRY4",
-//             currency_name: "usd",
-//             description:
-//                 "Apple designs a wide variety of consumer electronic devices, including smartphones (iPhone), tablets (iPad), PCs (Mac), smartwatches (Apple Watch), AirPods, and TV boxes (Apple TV), among others. The iPhone makes up the majority of Apple's total revenue. In addition, Apple offers its customers a variety of services such as Apple Music, iCloud, Apple Care, Apple TV+, Apple Arcade, Apple Card, and Apple Pay, among others. Apple's products run internally developed software and semiconductors, and the firm is well known for its integration of hardware, software and services. Apple's products are distributed online as well as through company-owned stores and third-party retailers. The company generates roughly 40% of its revenue from the Americas, with the remainder earned internationally.",
-//             homepage_url: "https://www.apple.com",
-//             list_date: "1980-12-12",
-//             locale: "us",
-//             market: "stocks",
-//             market_cap: 2771126040150,
-//             name: "Uber Inc.",
-//             phone_number: "(408) 996-1010",
-//             primary_exchange: "XNAS",
-//             round_lot: 100,
-//             share_class_figi: "BBG001S5N8V8",
-//             share_class_shares_outstanding: 16406400000,
-//             sic_code: "3571",
-//             sic_description: "ELECTRONIC COMPUTERS",
-//             ticker: "UBER",
-//             ticker_root: "AAPL",
-//             total_employees: 154000,
-//             type: "CS",
-//             weighted_shares_outstanding: 16334371000,
-//         },
-//         status: "OK",
-//     },
+const Container = styled.View`
+    width: 100%;
+`;
 
-//     // ... more items
-// ];
+const ButtonContainer = styled.View`
+    flex-direction: row;
+    justify-content: center;
+`;
+
+const Button = styled.TouchableOpacity`
+    padding-horizontal: 10px;
+    border-radius: 5px;
+    background-color: ${(props) => (props.selected ? "grey" : "transparent")};
+`;
+
+const ButtonText = styled.Text`
+    font-size: 20px;
+    color: #333;
+`;
+
+const DisplayContainer = styled.View`
+    margin-top: 20px;
+    padding-horizontal: 20px;
+    border-radius: 5px;
+`;
+
+const HeaderText = styled.Text`
+    font-size: 24px;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    margin-left: 20px;
+    color: white;
+`;
 
 const TopMovers = ({ navigation }) => {
     const [selectedButton, setSelectedButton] = useState("button1");
@@ -116,7 +63,6 @@ const TopMovers = ({ navigation }) => {
                 `http://localhost:3000/${endpoint}`
             );
             setDisplayData(Object.values(response.data));
-            // setDisplayData(stockData);
             setLoading(false);
         } catch (error) {
             console.error(error);
@@ -124,102 +70,46 @@ const TopMovers = ({ navigation }) => {
         }
     };
 
-    console.log("displayData:", displayData);
-
     const handleButtonPress = (buttonName, endpoint) => {
         setSelectedButton(buttonName);
         setLoading(true);
         setTimeout(async () => {
             await fetchData(endpoint);
-        }, 60000); // wait for 1 minute (60,000 milliseconds) before fetching data since the api has a limit of 5 requests per minute
-        // can change this to be tracking a global var to see how long it has to wait. ex 2 calls were done leaves with 3 before i have to wait the  minute
+        }, 60000);
     };
 
     return (
-        <View>
-            <Text style={styles.headerText}>Top Movers</Text>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    style={[
-                        styles.button,
-                        selectedButton === "button1" && styles.selectedButton,
-                    ]}
+        <Container>
+            <HeaderText>Top Movers</HeaderText>
+            <ButtonContainer>
+                <Button
+                    selected={selectedButton === "button1"}
                     onPress={() => handleButtonPress("button1", "trending")}
                 >
-                    <Text style={styles.buttonText}>Trending</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[
-                        styles.button,
-                        selectedButton === "button2" && styles.selectedButton,
-                    ]}
+                    <ButtonText>Trending</ButtonText>
+                </Button>
+                <Button
+                    selected={selectedButton === "button2"}
                     onPress={() => handleButtonPress("button2", "topgainers")}
                 >
-                    <Text style={styles.buttonText}>Top Gainers</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[
-                        styles.button,
-                        selectedButton === "button3" && styles.selectedButton,
-                    ]}
+                    <ButtonText>Top Gainers</ButtonText>
+                </Button>
+                <Button
+                    selected={selectedButton === "button3"}
                     onPress={() => handleButtonPress("button3", "toplosers")}
                 >
-                    <Text style={styles.buttonText}>Top Losers</Text>
-                </TouchableOpacity>
-            </View>
+                    <ButtonText>Top Losers</ButtonText>
+                </Button>
+            </ButtonContainer>
             {loading ? (
-                <ActivityIndicator
-                    style={styles.activityIndicator}
-                    size="large"
-                />
+                <ActivityIndicator size="large" />
             ) : (
-                <View style={styles.displayContainer}>
+                <DisplayContainer>
                     <StockList data={displayData} navigation={navigation} />
-                </View>
+                </DisplayContainer>
             )}
-        </View>
+        </Container>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        width: "100%",
-    },
-    buttonContainer: {
-        flexDirection: "row",
-        // justifyContent: "space-between",
-        justifyContent: "center",
-    },
-    button: {
-        paddingHorizontal: 10,
-        borderRadius: 5,
-    },
-    selectedButton: {
-        backgroundColor: "grey",
-    },
-    buttonText: {
-        fontSize: 20,
-        color: "#333",
-    },
-    displayContainer: {
-        marginTop: 20,
-        paddingHorizontal: 20,
-        borderRadius: 5,
-    },
-    displayText: {
-        fontSize: 20,
-        color: "#333",
-    },
-    headerText: {
-        fontSize: 24,
-        marginBottom: 10,
-        marginTop: 30,
-        marginLeft: 20,
-        color: "white",
-    },
-    activityIndicator: {
-        marginTop: 20,
-    },
-});
 
 export default TopMovers;

@@ -62,7 +62,7 @@ app.get("/trending", async (req, res) => {
 // API 3
 app.get("/topgainers", async (req, res) => {
     try {
-        const tickerSymbols = ["T", "BMWYY"];
+        const tickerSymbols = ["T", "AMZN"];
         const tickerDataBySymbol = await fetchAggregateTickerData(
             tickerSymbols
         ); // { AAPL: { response data }, MSFT: etc }

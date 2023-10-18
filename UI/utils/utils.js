@@ -12,6 +12,16 @@ function stockPriceInfo(openPrice, currentPrice) {
     };
 }
 
+function formatToDollarAmount(number) {
+    // Use toLocaleString() with 'en-US' locale to format as USD
+    return number.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2, // Ensure two decimal places
+    });
+}
+
 module.exports = {
     stockPriceInfo,
+    formatToDollarAmount,
 };

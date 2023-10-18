@@ -1,33 +1,28 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import styled from "styled-components/native";
 import StockList from "./StockList";
 
 const WatchList = ({ data, navigation }) => {
-    // console.log("data:", data);
     const dataArray = Object.values(data);
     return (
-        <View style={styles.container}>
-            <View>
-                <Text style={styles.text}>Watchlist</Text>
-            </View>
+        <Container>
+            <Title>Watchlist</Title>
             <StockList data={dataArray} navigation={navigation} />
-        </View>
+        </Container>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        marginTop: 20,
-        backgroundColor: "#1C1E20",
-        width: "100%",
-        height: "", // Set the height to 80% of the screen height
-    },
-    text: {
-        color: "white",
-        fontSize: 18,
-        marginLeft: 20,
-        padding: 10,
-    },
-});
+const Container = styled.View`
+    margin-top: 20px;
+    background-color: #1c1e20;
+    width: 100%;
+`;
+
+const Title = styled.Text`
+    color: white;
+    font-size: 18px;
+    margin-left: 20px;
+    padding: 10px;
+`;
 
 export default WatchList;

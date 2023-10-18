@@ -1,11 +1,8 @@
 const { getFormattedDate } = require("./utils");
 
-const todayDate = getFormattedDate();
-
 const API_KEY = "pUl0JVxf_lsFyYyoaLRBi3WvQFsFzcZF";
 
 async function fetchTickerData(ticker) {
-    // this is to get the ticker details (name, symbol, etc)
     try {
         const apiUrl = `https://api.polygon.io/v3/reference/tickers/${ticker}?apiKey=${API_KEY}`;
         const response = await fetch(apiUrl);
@@ -17,11 +14,20 @@ async function fetchTickerData(ticker) {
         }
 
         const data = await response.json();
+
+        // Add the API key to the branding URLs
+        // the data object returns the urls for the logo/icon without the api key
+        //im adding the api key here to the urls so that i dont have to access it in the UI
+        // can change api to process.env.API_KEY later
+        data.results.branding.icon_url = `${data.results.branding.icon_url}?apiKey=${API_KEY}`;
+        data.results.branding.logo_url = `${data.results.branding.logo_url}?apiKey=${API_KEY}`;
+
         return data;
     } catch (error) {
-        return error.message; // Return the error message instead of throwing it, that way the loop can continue.
+        return error.message;
     }
 }
+
 async function fetchTickerPrevCloseData(ticker) {
     // will be using this api to get the previous close price of the stock to simulate the current price of the stock
     try {

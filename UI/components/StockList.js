@@ -1,149 +1,118 @@
 import React from "react";
-import {
-    View,
-    FlatList,
-    Text,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-} from "react-native";
+import { View, FlatList, Text, Image, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { stockPriceInfo } from "../utils/utils";
+import styled from "styled-components/native";
+
+const ItemContainer = styled.TouchableOpacity`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1c1e20;
+    padding: 10px;
+    margin-vertical: 8px;
+    margin-horizontal: 16px;
+`;
+
+const TextContainer = styled.View`
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+`;
+
+const TextPriceContainer = styled.View`
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+`;
+
+const PriceContainer = styled.View`
+    flex-direction: row;
+    align-items: center;
+`;
+
+const Title = styled.Text`
+    color: white;
+    font-size: 12px;
+`;
+
+const StockName = styled.Text`
+    color: #5b5f60;
+    font-size: 12px;
+`;
+
+const ImageContainer = styled.Image`
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border-radius: 10px;
+`;
 
 const Item = ({ symbol, name, onPress, currentPrice, openPrice, imageUrl }) => {
-    // since im using the previous close price, i am using it as the current price of the stock
-    // i will be calculating if the stock went up or down by comparing the open price and the close price since the close price
-    // of the previous day is the opening price of the stock for the next day
-
-    // const priceDiff = openPrice - currentPrice;
-    // const priceDiffColor = priceDiff >= 0 ? "green" : "red";
-    // const priceDiffIcon = priceDiff >= 0 ? "arrow-up" : "arrow-down";
-    // const priceDiffPercentage = ((priceDiff / openPrice) * 100).toFixed(2);
-    // rememeber to move to utils later
-    console.log("imageUrl:", imageUrl); //change api key to dotenv
     const { priceDiff, priceDiffColor, priceDiffIcon, priceDiffPercentage } =
         stockPriceInfo(openPrice, currentPrice);
 
     return (
-        <TouchableOpacity onPress={onPress}>
-            <View style={styles.item}>
-                <View style={styles.textContainer}>
-                    <View
-                        style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                        <Image
-                            source={{ uri: imageUrl }}
-                            style={styles.image}
-                            resizeMode="contain" // This is to ensure the entire image is visible
-                        />
-                        <View style={styles.textContainer}>
-                            <Text style={styles.title}>{symbol}</Text>
-                            <Text style={styles.stockName}>{name}</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.textPriceContainer}>
-                    <Text style={styles.title}>{`$${currentPrice}`}</Text>
-                    <View style={styles.priceContainer}>
-                        {/* inline style due to being dynamic but can change to
-                        stylesheet later have it match a style */}
-                        <FontAwesome
-                            name={priceDiffIcon}
-                            size={12}
-                            color={priceDiffColor}
-                        />
-                        <Text
-                            style={{ color: priceDiffColor }}
-                        >{`$${priceDiff.toFixed(
-                            2
-                        )} (${priceDiffPercentage}%)`}</Text>
-                    </View>
-                </View>
+        <ItemContainer onPress={onPress}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <ImageContainer
+                    source={{ uri: imageUrl }}
+                    resizeMode="contain"
+                />
+                <TextContainer>
+                    <Title>{symbol}</Title>
+                    <StockName>{name}</StockName>
+                </TextContainer>
             </View>
-        </TouchableOpacity>
+            <TextPriceContainer>
+                <Title>{`$${currentPrice}`}</Title>
+                <PriceContainer>
+                    <FontAwesome
+                        name={priceDiffIcon}
+                        size={12}
+                        color={priceDiffColor}
+                    />
+                    <Text
+                        style={{ color: priceDiffColor }}
+                    >{`$${priceDiff.toFixed(
+                        2
+                    )} (${priceDiffPercentage}%)`}</Text>
+                </PriceContainer>
+            </TextPriceContainer>
+        </ItemContainer>
     );
 };
 
 const StockList = ({ data, navigation }) => {
-    console.log("data:", data);
-    const renderItem = ({ item }) => {
-        console.log("item:", item);
-        return (
-            <Item
-                symbol={item.tickerDetails.results.ticker}
-                name={item.tickerDetails.results.name}
-                currentPrice={item.tickerPrev.results[0].c}
-                openPrice={item.tickerPrev.results[0].o}
-                imageUrl={`${item.tickerDetails.results.branding.icon_url}?apiKey=pUl0JVxf_lsFyYyoaLRBi3WvQFsFzcZF`}
-                // clicking on a stock will show the individual stock page to simulate the user navigating to the stock pressed on
-                //which is going to show the individual stock's information
-                onPress={() =>
-                    navigation.navigate("Stock", {
-                        stock: item,
-                    })
-                }
-            />
-        );
+    const renderItems = () => {
+        return data.map((item) => {
+            return (
+                <Item
+                    key={item.tickerDetails.results.ticker}
+                    symbol={item.tickerDetails.results.ticker}
+                    name={item.tickerDetails.results.name}
+                    currentPrice={item.tickerPrev.results[0].c}
+                    openPrice={item.tickerPrev.results[0].o}
+                    imageUrl={item.tickerDetails.results.branding.icon_url}
+                    onPress={() =>
+                        navigation.navigate("Stock", {
+                            stock: item,
+                        })
+                    }
+                />
+            );
+        });
     };
 
-    return (
-        <FlatList
-            data={data}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.tickerDetails.results.ticker}
-        />
-    );
+    return <View>{renderItems()}</View>;
+    // previously had this as the return but it created conflict causing a nested virtual list since flallist has a scroll view
+    // return (
+    //     <FlatList
+    //         data={data}
+    //         renderItem={renderItem}
+    //         keyExtractor={(item) => item.tickerDetails.results.ticker}
+    //     />
+    // );
 };
-
-const styles = StyleSheet.create({
-    item: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        backgroundColor: "#1C1E20",
-        padding: 10,
-        marginVertical: 8,
-        marginHorizontal: 16,
-    },
-    textContainer: {
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "flex-start",
-    },
-    textPriceContainer: {
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "flex-end",
-    },
-    priceContainer: { flexDirection: "row", alignItems: "center" },
-    title: {
-        color: "white",
-        fontSize: 12,
-    },
-    openPrice: {
-        color: "white",
-        fontSize: 12,
-    },
-    text: {
-        color: "white",
-        fontSize: 18,
-        marginLeft: 20,
-    },
-    icon: {
-        width: 50,
-        height: 50,
-        marginRight: 10,
-    },
-    stockName: {
-        color: "#5B5F60",
-        fontSize: 12,
-    },
-    image: {
-        width: 20, // Or whatever size you need
-        height: 20, // Or whatever size you need
-        marginRight: 10,
-        borderRadius: 10,
-    },
-});
 
 export default StockList;
