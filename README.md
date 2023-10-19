@@ -18,7 +18,7 @@ In the Api Terminal -> node app.js
 Using Xcode for IOS simulator
 
 Attached are a few screenshots of the app:
-![Simulator Screenshot - iPhone SE (3rd generation) - 2023-10-19 at 15 14 27](https://github.com/Cmolerov/clockoutproject/assets/68914791/9aa85942-585d-432b-a375-5f5002543d00)
-![Simulator Screenshot - iPhone SE (3rd generation) - 2023-10-19 at 15 15 37](https://github.com/Cmolerov/clockoutproject/assets/68914791/9ed24ec9-6d70-4c12-81e2-e061184cc3c4)
-![Simulator Screenshot - iPhone SE (3rd generation) - 2023-10-19 at 15 16 18](https://github.com/Cmolerov/clockoutproject/assets/68914791/9a4df81f-77a8-4034-b149-285864b4ccc7)
-![Simulator Screenshot - iPhone SE (3rd generation) - 2023-10-19 at 13 46 04](https://github.com/Cmolerov/clockoutproject/assets/68914791/3650c41f-5f56-4818-b379-a1063bd4431c)
+![Simulator Screenshot - iPhone SE (3rd generation) - 2023-10-19 at 15 54 55](https://github.com/Cmolerov/clockoutproject/assets/68914791/150cd978-4360-4d77-b7a5-94bc3fd54125)
+![Simulator Screenshot - iPhone SE (3rd generation) - 2023-10-19 at 15 49 34](https://github.com/Cmolerov/clockoutproject/assets/68914791/c293f4aa-9712-4a18-89c6-5a0746cdfc7c)
+![Simulator Screenshot - iPhone SE (3rd generation) - 2023-10-19 at 15 49 27](https://github.com/Cmolerov/clockoutproject/assets/68914791/43d9ceda-3893-46ff-a266-30731c38b57d)
+![Simulator Screenshot - iPhone SE (3rd generation) - 2023-10-19 at 13 46 04](https://github.com/Cmolerov/clockoutproject/assets/68914791/22e59429-19ed-429c-8e60-ba56cba55354)
