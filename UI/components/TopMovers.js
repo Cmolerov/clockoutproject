@@ -10,6 +10,7 @@ import axios from "axios";
 import StockList from "./StockList";
 import styled from "styled-components/native";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { FontAwesome } from "@expo/vector-icons";
 
 const Container = styled.View`
     width: 100%;
@@ -40,9 +41,27 @@ const DisplayContainer = styled.View`
 const HeaderText = styled.Text`
     font-size: 24px;
     margin-bottom: 10px;
-    margin-top: 30px;
+    margin-top: 20px;
     margin-left: 20px;
     color: white;
+`;
+
+const TitleContainer = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+`;
+const AllText = styled.Text`
+    color: white;
+    font-size: 16px;
+    margin-right: 5px;
+`;
+
+const AllButton = styled.TouchableOpacity`
+    flex-direction: row;
+    align-items: center;
+    margin-top: 5px;
 `;
 
 const TopMovers = ({ navigation }) => {
@@ -81,7 +100,13 @@ const TopMovers = ({ navigation }) => {
 
     return (
         <Container>
-            <HeaderText>Top Movers</HeaderText>
+            <TitleContainer>
+                <HeaderText>Top Movers</HeaderText>
+                <AllButton>
+                    <AllText>All</AllText>
+                    <FontAwesome name="arrow-right" size={16} color="white" />
+                </AllButton>
+            </TitleContainer>
             <ButtonContainer>
                 <Button
                     selected={selectedButton === "button1"}
