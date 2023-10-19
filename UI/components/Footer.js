@@ -1,48 +1,52 @@
 import React from "react";
+import styled from "styled-components/native";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
+const FooterContainer = styled.View`
+    background-color: #111415;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+`;
+
+const FooterButton = styled.TouchableOpacity`
+    align-items: center;
+`;
+
+const Label = styled.Text`
+    color: white;
+    font-size: 12px;
+    margin-top: 5px;
+`;
+
 const Footer = () => {
     return (
-        <View style={styles.footer}>
-            <TouchableOpacity>
+        <FooterContainer>
+            <FooterButton>
                 <FontAwesome name="home" size={24} color="white" />
-                <Text style={styles.label}>Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
+                <Label>Home</Label>
+            </FooterButton>
+            <FooterButton>
                 <FontAwesome name="line-chart" size={24} color="white" />
-                <Text style={styles.label}>Markets</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
+                <Label>Markets</Label>
+            </FooterButton>
+            <FooterButton>
                 <FontAwesome name="exchange" size={24} color="white" />
-                <Text style={styles.label}>Trade</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
+                <Label>Trade</Label>
+            </FooterButton>
+            <FooterButton>
                 <FontAwesome name="pie-chart" size={24} color="white" />
-                <Text style={styles.label}>Portfolio</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
+                <Label>Portfolio</Label>
+            </FooterButton>
+            <FooterButton>
                 <FontAwesome name="ellipsis-h" size={24} color="white" />
-                <Text style={styles.label}>More</Text>
-            </TouchableOpacity>
-        </View>
+                <Label>More</Label>
+            </FooterButton>
+        </FooterContainer>
     );
 };
-
-const styles = StyleSheet.create({
-    footer: {
-        backgroundColor: "#111415",
-        padding: 20,
-        alignItems: "center",
-        justifyContent: "space-between",
-        flexDirection: "row",
-        width: "100%",
-    },
-    label: {
-        color: "white",
-        fontSize: 12,
-        marginTop: 5,
-    },
-});
 
 export default Footer;

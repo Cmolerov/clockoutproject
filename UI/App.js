@@ -48,8 +48,8 @@ function App() {
                                             scrollViewContentStyle
                                         }
                                     >
-                                        <Headers />
-                                        <WatchLists {...props} />
+                                        <HeaderSection />
+                                        <Watchlist {...props} />
                                         <TopMovers {...props} />
                                     </ScrollView>
                                     <Footer />
@@ -76,7 +76,7 @@ function useWatchlistData() {
     });
 }
 
-function Headers() {
+function HeaderSection() {
     const { data, isLoading, isError } = useWatchlistData();
 
     if (isLoading) {
@@ -90,7 +90,7 @@ function Headers() {
     return <Header data={data} />;
 }
 
-function WatchLists(props) {
+function Watchlist(props) {
     const { data, isLoading, isError } = useWatchlistData();
 
     if (isLoading) {

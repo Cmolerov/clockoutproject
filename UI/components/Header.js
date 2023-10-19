@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, FlatList, Text, Image, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -40,7 +40,7 @@ const BuyingPowerContainer = styled.View`
     margin-top: 10px;
 `;
 
-const DepositButton = styled.View`
+const DepositButton = styled.TouchableOpacity`
     background-color: #4d4d4d;
     border-radius: 10px;
     padding-vertical: 10px;
@@ -53,6 +53,7 @@ const DepositButtonText = styled.Text`
     font-size: 16px;
 `;
 
+// setting this up to use as purchasing price of the stocks i have in my watch list
 const ORDER_HISTORY = {
     AAPL: {
         quantity: 30,
@@ -72,16 +73,26 @@ let totalSpent = Object.values(ORDER_HISTORY).reduce((acc, el) => {
 }, 0);
 
 const Header = ({ data }) => {
+    // let totalSpent = Object.values(ORDER_HISTORY).reduce((acc, el) => {
+    //     return el.price * el.quantity;
+    // }, 0);
+
+    let [totalInvested, setTotalInvested] = useState(0);
     const stockPrice = {};
-    let totalInvested = 0;
 
-    Object.values(data).forEach(({ tickerPrev }) => {
-        stockPrice[tickerPrev.results[0].T] = tickerPrev.results[0].c;
-    });
+    useEffect(() => {
+        if (data) {
+            Object.values(data).forEach(({ tickerPrev }) => {
+                stockPrice[tickerPrev.results[0].T] = tickerPrev.results[0].c;
+            });
 
-    for (const key in ORDER_HISTORY) {
-        totalInvested += stockPrice[key] * ORDER_HISTORY[key].quantity;
-    }
+            let totalInvested = 0;
+            for (const key in ORDER_HISTORY) {
+                totalInvested += stockPrice[key] * ORDER_HISTORY[key].quantity;
+            }
+            setTotalInvested(totalInvested);
+        }
+    }, [data]);
 
     let change = totalInvested - totalSpent;
     const percentChange = ((change / totalSpent) * 100).toFixed(2);
@@ -118,6 +129,7 @@ const Header = ({ data }) => {
                     <BuyingPowerText>BUYING POWER</BuyingPowerText>
                     <AmountText>{buyingPower}</AmountText>
                 </View>
+
                 <DepositButton>
                     <DepositButtonText>+ Deposit</DepositButtonText>
                 </DepositButton>
