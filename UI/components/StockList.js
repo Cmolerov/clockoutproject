@@ -105,7 +105,9 @@ const StockList = ({ data, navigation }) => {
     };
 
     return <View>{renderItems()}</View>;
-    // previously had this as the return but it created conflict causing a nested virtual list since flallist has a scroll view
+
+    // learning note
+    // this created conflict causing a nested virtual list since flallist has a scroll view
     // return (
     //     <FlatList
     //         data={data}

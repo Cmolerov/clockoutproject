@@ -1,16 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-    StyleSheet,
-    View,
-    ScrollView,
-    Text,
-    RefreshControl,
-} from "react-native";
+import { View, ScrollView, Text, RefreshControl } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { SafeAreaView } from "react-native";
+import styled from "styled-components/native";
 import Header from "./components/Header";
 import WatchList from "./components/WatchList";
 import TopMovers from "./components/TopMovers";
@@ -21,21 +16,25 @@ const Stack = createStackNavigator();
 
 const queryClient = new QueryClient();
 
+// another option would be to set these styles as components to be able to reuse them in other components
+const SafeArea = styled.SafeAreaView`
+    flex: 1;
+`;
+
+const Container = styled.View`
+    flex: 1;
+    margin-top: 20px;
+    background-color: #111415;
+`;
+
+const scrollViewContentStyle = {
+    flexGrow: 1,
+};
+
 function App() {
-    // const [refreshing, setRefreshing] = React.useState(false);
-    // const { refetch } = useWatchlistData();
-
-    // const onRefresh = React.useCallback(() => {
-    //     setRefreshing(true);
-    //     refetch();
-    //     setTimeout(() => {
-    //         setRefreshing(false);
-    //     }, 2000);
-    // }, [refetch]);
-
     return (
         <QueryClientProvider client={queryClient}>
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeArea>
                 <NavigationContainer>
                     <Stack.Navigator initialRouteName="Home">
                         <Stack.Screen
@@ -43,35 +42,30 @@ function App() {
                             options={{ headerShown: false }}
                         >
                             {(props) => (
-                                <View style={styles.container}>
+                                <Container>
                                     <ScrollView
                                         contentContainerStyle={
-                                            styles.scrollViewContent
+                                            scrollViewContentStyle
                                         }
-                                        // refreshControl={
-                                        //     <RefreshControl
-                                        //         refreshing={refreshing}
-                                        //         onRefresh={onRefresh}
-                                        //     />
-                                        // }
                                     >
                                         <Headers />
                                         <WatchLists {...props} />
                                         <TopMovers {...props} />
                                     </ScrollView>
                                     <Footer />
-                                </View>
+                                </Container>
                             )}
                         </Stack.Screen>
                         <Stack.Screen name="Stock" component={Stock} />
                     </Stack.Navigator>
                 </NavigationContainer>
-            </SafeAreaView>
+            </SafeArea>
         </QueryClientProvider>
     );
 }
 
 function useWatchlistData() {
+    // add logic for this fetch to wait if the app was reloading too quickly due to api limit
     return useQuery("watchlistData", async () => {
         try {
             const { data } = await axios.get("http://localhost:3000/watchlist");
@@ -109,16 +103,5 @@ function WatchLists(props) {
 
     return <WatchList {...props} data={data} />;
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: 20,
-        backgroundColor: "#111415",
-    },
-    scrollViewContent: {
-        flexGrow: 1,
-    },
-});
 
 export default App;

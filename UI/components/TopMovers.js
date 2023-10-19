@@ -50,10 +50,11 @@ const TopMovers = ({ navigation }) => {
     const [displayData, setDisplayData] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // have this waiting a minute before fetching data due to the api limit of 5 requests per minute.
     useEffect(() => {
         setTimeout(async () => {
             await fetchData("trending");
-        }, 6000);
+        }, 60000);
     }, []);
 
     const fetchData = async (endpoint) => {

@@ -1,5 +1,6 @@
 const { getFormattedDate } = require("./utils");
 
+//ususally would put this in a .env file or in process.env but for the sake of this project i will leave it here
 const API_KEY = "pUl0JVxf_lsFyYyoaLRBi3WvQFsFzcZF";
 
 async function fetchTickerData(ticker) {
@@ -48,10 +49,9 @@ async function fetchTickerPrevCloseData(ticker) {
 }
 
 // Function to aggregate multiple GET requests using async/await
+// create a function to get all the stocks data at once instead of making multiple api calls for each stock in the UI
+// will need to merge the data from the two api calls into one object to get the data for each stock including (price, name, symbol, etc)
 async function fetchAggregateTickerData(tickers) {
-    // creating a function to get all the stocks data at once instead of making multiple api calls for each stock
-    // will need to merge the data from the two api calls into one object to get the data for each stock including (price, name, symbol, etc)
-
     // console.log("tickers:", tickers);
     const tickerDataBySymbol = {};
 

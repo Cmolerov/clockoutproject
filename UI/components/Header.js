@@ -64,6 +64,9 @@ const ORDER_HISTORY = {
     },
 };
 
+// this is the total amount spent on all the stocks from the order history (being the inital investment)
+// to simulate how much money the user has made or lost, i will be using the current price of the stock
+// those prices from order history are the prices the user bought the stocks at which I made up
 let totalSpent = Object.values(ORDER_HISTORY).reduce((acc, el) => {
     return el.price * el.quantity;
 }, 0);
